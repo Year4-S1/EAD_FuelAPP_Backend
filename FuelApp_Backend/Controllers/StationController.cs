@@ -40,9 +40,7 @@ namespace FuelApp_Backend.Controllers
             var result = dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").AsQueryable();
 
             return new JsonResult(result);
-        }
-
-
+        }    
         //Add stations
         [HttpPost("create")]
         public JsonResult AddStations(StationModel station)
@@ -54,11 +52,13 @@ namespace FuelApp_Backend.Controllers
             return new JsonResult("Inserted Successfully");
         }
 
+
         //Search Function
         //public async Task<AcceptedResult<Enumerable<StationModel>>> SearchStation(string location)
         //{
 
         //}
+
 
     }
 }
