@@ -32,6 +32,7 @@ namespace FuelApp_Backend.Controllers
             return new JsonResult(dbList);
         }
 
+<<<<<<< HEAD
         [HttpGet("{id:int}")]
         public JsonResult GetStationByID(int id)
         {
@@ -43,6 +44,8 @@ namespace FuelApp_Backend.Controllers
         }
 
 
+=======
+>>>>>>> 7ebe3b0a30dd1f8e32daf33a7df7aa50a56ac5d8
         //Add stations
         [HttpPost("create")]
         public JsonResult AddStations(StationModel station)
@@ -54,11 +57,14 @@ namespace FuelApp_Backend.Controllers
             return new JsonResult("Inserted Successfully");
         }
 
+<<<<<<< HEAD
         //Search Function
         //public async Task<AcceptedResult<Enumerable<StationModel>>> SearchStation(string location)
         //{
 
         //}
 
+=======
+>>>>>>> 7ebe3b0a30dd1f8e32daf33a7df7aa50a56ac5d8
     }
 }
