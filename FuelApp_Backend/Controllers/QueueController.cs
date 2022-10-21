@@ -2,9 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+<<<<<<< HEAD
+using FuelApp_Backend.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Driver;
+=======
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+>>>>>>> 7ebe3b0a30dd1f8e32daf33a7df7aa50a56ac5d8
 
 namespace FuelApp_Backend.Controllers
 {
@@ -19,6 +27,33 @@ namespace FuelApp_Backend.Controllers
             _configuration = configuration;
         }
 
+<<<<<<< HEAD
+
+        //View Queue Details
+        [HttpGet]
+        public JsonResult GetQueues()
+        {
+            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
+
+            var dbList = dbClient.GetDatabase("fueldb").GetCollection<QueueModel>("queue").AsQueryable();
+
+            return new JsonResult(dbList);
+        }
+
+        [HttpPost("add")]
+        public JsonResult AddQueues(QueueModel queue)
+        {
+            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
+
+            queue.Date = DateTime.Now.ToString("dd/MM/yyyy");
+            queue.Time = DateTime.Now.ToString("HH:mm:ss");
+
+            dbClient.GetDatabase("fueldb").GetCollection<QueueModel>("queue").InsertOne(queue);
+
+            return new JsonResult("Added Successfully");
+        }
+=======
        
+>>>>>>> 7ebe3b0a30dd1f8e32daf33a7df7aa50a56ac5d8
     }
 }
