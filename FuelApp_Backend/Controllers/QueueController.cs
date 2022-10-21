@@ -21,7 +21,7 @@ namespace FuelApp_Backend.Controllers
             _configuration = configuration;
         }
 
-
+       
         //View Queue Details
         [HttpGet]
         public JsonResult GetQueues()

@@ -87,6 +87,7 @@ namespace FuelApp_Backend.Controllers
         {
             MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
 
+
             var dbList = dbClient.GetDatabase("fueldb").GetCollection<UserModel>("user").Find(user => user.Phone == login.Phone).ToList();
 
             // Verifying
