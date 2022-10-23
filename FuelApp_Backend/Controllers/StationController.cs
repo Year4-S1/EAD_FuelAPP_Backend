@@ -55,7 +55,27 @@ namespace FuelApp_Backend.Controllers
 
 
         //Search Function
-    
+        [HttpGet("search/stations")]
+        public JsonResult SearchStation(StationSearchModel searchStation)
+        {
+            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
+
+            if (searchStation.Name != null)
+            {
+                var dbList = dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").Find(station => station.StationName.ToLower() == searchStation.Name.ToLower()).ToList();
+
+                return new JsonResult(dbList);
+            }
+            else if (searchStation.Location != null)
+            {
+                var dbList = dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").Find(station => station.Location.ToLower() == searchStation.Location.ToLower()).ToList();
+                return new JsonResult(dbList);
+            }
+            else
+            {
+                return new JsonResult("Search Filling Stations");
+            }
+        }
 
 
     }
