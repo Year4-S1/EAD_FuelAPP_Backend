@@ -22,7 +22,7 @@ namespace FuelApp_Backend.Controllers
         }
 
         //View all Stations
-        [HttpGet]
+        [HttpGet("get/all")]
         public JsonResult GetStations()
         {
             MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
@@ -41,6 +41,7 @@ namespace FuelApp_Backend.Controllers
 
             return new JsonResult(result);
         }    
+
         //Add stations
         [HttpPost("create")]
         public JsonResult AddStations(StationModel station)
@@ -54,10 +55,7 @@ namespace FuelApp_Backend.Controllers
 
 
         //Search Function
-        //public async Task<AcceptedResult<Enumerable<StationModel>>> SearchStation(string location)
-        //{
-
-        //}
+    
 
 
     }

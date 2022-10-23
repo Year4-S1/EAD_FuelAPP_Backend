@@ -12,7 +12,9 @@ namespace FuelApp_Backend.Models
 
         public string Date { get; set; }
 
-        public string Time { get; set; }
+        public string ArrivalTime { get; set; }
+
+        public string DepartureTime { get; set; }
 
         public string StationId { get; set; }
         
