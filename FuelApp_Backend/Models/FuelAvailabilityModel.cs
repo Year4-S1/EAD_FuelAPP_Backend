@@ -14,7 +14,7 @@ namespace FuelApp_Backend.Models
 
         public string FuelTypes { get; set; }
 
-        public Boolean Availability { get; set; }
+        public bool Availability { get; set; }
 
         public int AmountOfFuel { get; set; }
     }

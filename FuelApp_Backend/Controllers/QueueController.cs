@@ -6,6 +6,7 @@ using FuelApp_Backend.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace FuelApp_Backend.Controllers
@@ -33,17 +34,37 @@ namespace FuelApp_Backend.Controllers
             return new JsonResult(dbList);
         }
 
+        //Add queue details
         [HttpPost("add")]
         public JsonResult AddQueues(QueueModel queue)
         {
             MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
 
             queue.Date = DateTime.Now.ToString("dd/MM/yyyy");
-            queue.Time = DateTime.Now.ToString("HH:mm:ss");
+            queue.ArrivalTime = DateTime.Now.ToString("HH:mm:ss");
+            queue.DepartureTime = "";
 
             dbClient.GetDatabase("fueldb").GetCollection<QueueModel>("queue").InsertOne(queue);
 
             return new JsonResult("Added Successfully");
+        }
+
+
+        //Update departure time 
+        [HttpPut("update/depart/{id}")]
+        public JsonResult UpdateTime(String id)
+        {
+            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
+
+            var queueID = new ObjectId(id);
+            var filterId = Builders<QueueModel>.Filter.Eq("_id", queueID);
+            var updateTime = Builders<QueueModel>.Update.Set("DepartureTime", DateTime.Now.ToString("HH:mm:ss"));
+
+            dbClient.GetDatabase("fueldb").GetCollection<QueueModel>("queue").UpdateOne(filterId, updateTime);
+
+            var departTime = dbClient.GetDatabase("fueldb").GetCollection<QueueModel>("queue").Find(queueTime => queueTime.Id == queueID).ToList();
+
+            return new JsonResult("Updated Successfully");
         }
     }
 }
