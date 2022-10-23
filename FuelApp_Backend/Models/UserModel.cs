@@ -18,11 +18,7 @@ namespace FuelApp_Backend.Models
 
         public string UserType { get; set; }
 
-<<<<<<< HEAD
         public bool LoginStatus { get; set; }
-=======
-        public Boolean LoginStatus { get; set; }
->>>>>>> 7ebe3b0a30dd1f8e32daf33a7df7aa50a56ac5d8
 
     }
 }
