@@ -102,8 +102,7 @@ namespace FuelApp_Backend.Controllers
                 dbClient.GetDatabase("fueldb").GetCollection<UserModel>("user").UpdateOne(filter, update);
                 var updateLogin = dbClient.GetDatabase("fueldb").GetCollection<UserModel>("user").Find(user => user.Phone == login.Phone).ToList();
 
-
-                return new JsonResult(updateLogin);
+                return new JsonResult(updateLogin[0]);
             }
             else
             {
