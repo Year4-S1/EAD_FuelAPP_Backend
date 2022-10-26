@@ -6,6 +6,7 @@ using FuelApp_Backend.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace FuelApp_Backend.Controllers
@@ -79,6 +80,29 @@ namespace FuelApp_Backend.Controllers
             }
         }
 
+        [HttpPut("update/availability/{id}")]
+        public JsonResult UpdateFuelAvailability(string id, StationModel fuelAvailability)
+        {
+            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
 
+            var fuelId = new ObjectId(id);
+            var filter = Builders<StationModel>.Filter.Eq("_id", fuelId);
+            var update = Builders<StationModel>.Update.Set("FuelTypes", fuelAvailability.FuelTypes).Set("Availability", fuelAvailability.Availability).Set("AmountOfFuel", fuelAvailability.AmountOfFuel);
+            dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").UpdateOne(filter, update);
+            var updated_fuel_availability = dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").Find(fuel => fuel.Id == fuelId).ToList();
+
+            return new JsonResult(updated_fuel_availability[0]);
+        }
+
+        //Get fuel availability per station
+        [HttpGet("getstation/{id}")]
+        public JsonResult GetFuelAvailabilityForOneStation(string id)
+        {
+            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
+
+            var Station_fuel_list = dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").Find(stations => stations.StationID == id).ToList();
+
+            return new JsonResult(Station_fuel_list[0]);
+        }
     }
 }
