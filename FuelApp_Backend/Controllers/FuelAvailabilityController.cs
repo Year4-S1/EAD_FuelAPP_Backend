@@ -54,7 +54,7 @@ namespace FuelApp_Backend.Controllers
 
             var Station_fuel_list = dbClient.GetDatabase("fueldb").GetCollection<FuelAvailabilityModel>("fuelavailability").Find(fueldetails => fueldetails.StationID == Id).ToList();
 
-            return new JsonResult(Station_fuel_list);
+            return new JsonResult(Station_fuel_list[0]);
         }
 
         [HttpPut("update/availability/{id}")]
@@ -68,7 +68,7 @@ namespace FuelApp_Backend.Controllers
             dbClient.GetDatabase("fueldb").GetCollection<FuelAvailabilityModel>("fuelavailability").UpdateOne(filter, update);
             var updated_fuel_availability = dbClient.GetDatabase("fueldb").GetCollection<FuelAvailabilityModel>("fuelavailability").Find(fuel => fuel.Id == fuelId).ToList();
 
-            return new JsonResult(updated_fuel_availability);
+            return new JsonResult(updated_fuel_availability[0]);
         }
     }
 }

@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 
 namespace FuelApp_Backend.Models
 {
-    public class VehicleModel
+    public class FuelTypes
     {
-
     }
 }

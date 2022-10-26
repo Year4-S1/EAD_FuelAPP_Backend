@@ -88,7 +88,6 @@ namespace FuelApp_Backend.Controllers
         {
             MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
 
-
             var dbList = dbClient.GetDatabase("fueldb").GetCollection<UserModel>("user").Find(user => user.Phone == login.Phone).ToList();
 
             // Verifying
@@ -102,8 +101,7 @@ namespace FuelApp_Backend.Controllers
                 dbClient.GetDatabase("fueldb").GetCollection<UserModel>("user").UpdateOne(filter, update);
                 var updateLogin = dbClient.GetDatabase("fueldb").GetCollection<UserModel>("user").Find(user => user.Phone == login.Phone).ToList();
 
-
-                return new JsonResult(updateLogin);
+                return new JsonResult(updateLogin[0]);
             }
             else
             {
