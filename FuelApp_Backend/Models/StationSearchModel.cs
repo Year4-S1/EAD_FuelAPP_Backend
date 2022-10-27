@@ -9,6 +9,6 @@ namespace FuelApp_Backend.Models
     {
         public string Name { get; set; }
 
-        public string Location { get; set; }
+        public string District { get; set; }
     }
 }

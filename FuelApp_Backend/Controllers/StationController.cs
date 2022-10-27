@@ -51,32 +51,28 @@ namespace FuelApp_Backend.Controllers
 
             dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").InsertOne(station);
 
-            return new JsonResult("Inserted Successfully");
+            return new JsonResult(station);
         }
 
 
         //Search stations
-        [HttpGet("search/stations")]
-        public JsonResult SearchStation(StationSearchModel searchStation)
+        [HttpGet("search/{station}")]
+        public JsonResult SearchStation(string station)
         {
             MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
 
-            //check if the station Name is not null/empty
-            if (searchStation.Name != null)
-            {
-                var dbList = dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").Find(station => station.StationName.ToLower() == searchStation.Name.ToLower()).ToList();
+            var stationValue = station;
 
-                return new JsonResult(dbList);
-            }
-            //check whether the location of Station is not null/empty
-            else if (searchStation.Location != null)
+            //check if the station name is not null
+            if (station != null)
             {
-                var dbList = dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").Find(station => station.Location.ToLower() == searchStation.Location.ToLower()).ToList();
+                var dbList = dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").Find(station => station.StationName.ToLower() == stationValue.ToLower() || station.District.ToLower() == stationValue.ToLower()).ToList();
+
                 return new JsonResult(dbList);
             }
             else
             {
-                return new JsonResult("Search Filling Stations");
+                return new JsonResult("Please Enter a value Search");
             }
         }
 
@@ -103,6 +99,16 @@ namespace FuelApp_Backend.Controllers
             var Station_fuel_list = dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").Find(stations => stations.StationID == id).ToList();
 
             return new JsonResult(Station_fuel_list[0]);
+        }
+
+        [HttpGet("perfuel/{id}/{fuel}")]
+        public JsonResult GetFuelDetailsPerStationPerFuel(string id, string fuel)
+        {
+            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
+
+            var per_Station_fuel_list = dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").Find(fueldetail => fueldetail.StationID == id && fueldetail.FuelTypes.ToLower() == fuel.ToLower()).ToList();
+
+            return new JsonResult(per_Station_fuel_list[0]);
         }
     }
 }

@@ -18,9 +18,9 @@ namespace FuelApp_Backend.Models
 
         public string District { get; set; }
 
-        public string[] FuelTypes {get; set; }
+        public string FuelTypes {get; set; }
 
-        public string[] VehicleTypes { get; set; }
+        public string VehicleTypes { get; set; }
 
         public bool Availability { get; set; }
 

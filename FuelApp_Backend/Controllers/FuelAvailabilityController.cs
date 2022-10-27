@@ -42,7 +42,7 @@ namespace FuelApp_Backend.Controllers
 
             dbClient.GetDatabase("fueldb").GetCollection<FuelAvailabilityModel>("fuelavailability").InsertOne(fuelInfo);
 
-            return new JsonResult("Inserted Successfully");
+            return new JsonResult(fuelInfo);
         }
 
 
@@ -69,6 +69,16 @@ namespace FuelApp_Backend.Controllers
             var updated_fuel_availability = dbClient.GetDatabase("fueldb").GetCollection<FuelAvailabilityModel>("fuelavailability").Find(fuel => fuel.Id == fuelId).ToList();
 
             return new JsonResult(updated_fuel_availability[0]);
+        }
+
+        [HttpGet("perfuel/{id}/{fuel}")]
+        public JsonResult GetFuelDetailsPerStationPerFuel(string id, string fuel)
+        {
+            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
+
+            var per_Station_fuel_list = dbClient.GetDatabase("fueldb").GetCollection<FuelAvailabilityModel>("fuelavailability").Find(fueldetail => fueldetail.StationID == id && fueldetail.FuelTypes.ToLower() == fuel.ToLower()).ToList();
+
+            return new JsonResult(per_Station_fuel_list[0]);
         }
     }
 }

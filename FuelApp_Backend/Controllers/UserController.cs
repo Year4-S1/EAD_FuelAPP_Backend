@@ -48,7 +48,7 @@ namespace FuelApp_Backend.Controllers
 
             dbClient.GetDatabase("fueldb").GetCollection<UserModel>("user").InsertOne(user);
 
-            return new JsonResult("Inserted Successfully");
+            return new JsonResult(user);
         }
 
         //Update User Information
