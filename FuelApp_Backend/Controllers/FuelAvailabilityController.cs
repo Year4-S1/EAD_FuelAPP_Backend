@@ -74,11 +74,22 @@ namespace FuelApp_Backend.Controllers
         [HttpGet("perfuel/{id}/{fuel}")]
         public JsonResult GetFuelDetailsPerStationPerFuel(string id, string fuel)
         {
-            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
+            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApp"));
 
-            var per_Station_fuel_list = dbClient.GetDatabase("fueldb").GetCollection<FuelAvailabilityModel>("fuelavailability").Find(fueldetail => fueldetail.StationID == id && fueldetail.FuelTypes.ToLower() == fuel.ToLower()).ToList();
+            var per_Station_fuel_list_N = dbClient.GetDatabase("fueldb").GetCollection<FuelAvailabilityModel>("fuelavailability").Find(fueldetail => fueldetail.StationID == id && fueldetail.FuelTypes == fuel).ToList();
 
-            return new JsonResult(per_Station_fuel_list[0]);
+            if (per_Station_fuel_list_N != null && per_Station_fuel_list_N.Count != 0)
+            {
+                var per_Station_fuel_list = dbClient.GetDatabase("fueldb").GetCollection<FuelAvailabilityModel>("fuelavailability").Find(fueldetail => fueldetail.StationID == id && fueldetail.FuelTypes.ToLower() == fuel.ToLower()).ToList();
+
+                return new JsonResult(per_Station_fuel_list[0]);
+            }
+            else
+            {
+
+                return new JsonResult("Fuel Type Not available");
+            }
+
         }
     }
 }

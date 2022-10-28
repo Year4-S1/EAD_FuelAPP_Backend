@@ -82,33 +82,28 @@ namespace FuelApp_Backend.Controllers
             MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
 
             var fuelId = new ObjectId(id);
+            //filter by fuelId
             var filter = Builders<StationModel>.Filter.Eq("_id", fuelId);
-            var update = Builders<StationModel>.Update.Set("FuelTypes", fuelAvailability.FuelTypes).Set("Availability", fuelAvailability.Availability).Set("AmountOfFuel", fuelAvailability.AmountOfFuel);
+            //update fuel status and amount
+            var update = Builders<StationModel>.Update.Set("Availability", fuelAvailability.Availability).Set("AmountOfFuel", fuelAvailability.AmountOfFuel);
             dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").UpdateOne(filter, update);
-            var updated_fuel_availability = dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").Find(fuel => fuel.Id == fuelId).ToList();
+            var updated_fuel = dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").Find(fueldetail => fueldetail.Id == fuelId).ToList();
 
-            return new JsonResult(updated_fuel_availability[0]);
+            return new JsonResult(updated_fuel[0]);
         }
 
-        //Get fuel availability per station
+
         [HttpGet("getstation/{id}")]
-        public JsonResult GetFuelAvailabilityForOneStation(string id)
+        public JsonResult UpdateStationDetails(string id)
         {
             MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
 
-            var Station_fuel_list = dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").Find(stations => stations.StationID == id).ToList();
+            var ownerId = id;
 
-            return new JsonResult(Station_fuel_list[0]);
-        }
+            var dbList = dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").Find(station => station.StationOwnerID.ToLower() == ownerId.ToLower()).ToList();
 
-        [HttpGet("perfuel/{id}/{fuel}")]
-        public JsonResult GetFuelDetailsPerStationPerFuel(string id, string fuel)
-        {
-            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
+            return new JsonResult(dbList[0]);
 
-            var per_Station_fuel_list = dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").Find(fueldetail => fueldetail.StationID == id && fueldetail.FuelTypes.ToLower() == fuel.ToLower()).ToList();
-
-            return new JsonResult(per_Station_fuel_list[0]);
         }
     }
 }

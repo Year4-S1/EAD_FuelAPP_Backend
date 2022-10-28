@@ -14,13 +14,14 @@ namespace FuelApp_Backend.Models
 
         public string StationName { get; set; }
 
+        public string StationOwnerID { get; set; }
         public string Location { get; set; }
 
         public string District { get; set; }
 
-        public string FuelTypes {get; set; }
+        public string[] FuelTypes {get; set; }
 
-        public string VehicleTypes { get; set; }
+        public string[] VehicleTypes { get; set; }
 
         public bool Availability { get; set; }
 

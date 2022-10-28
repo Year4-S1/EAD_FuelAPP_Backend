@@ -125,7 +125,7 @@ namespace FuelApp_Backend.Controllers
 
             var updated_details = dbClient.GetDatabase("fueldb").GetCollection<UserModel>("user").Find(user => user.Id == userID).ToList();
 
-            return new JsonResult("Successfully Logged out");
+            return new JsonResult(updated_details[0]);
 
         }
     }
