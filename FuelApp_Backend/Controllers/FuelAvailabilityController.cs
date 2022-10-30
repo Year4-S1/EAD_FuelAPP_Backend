@@ -54,7 +54,7 @@ namespace FuelApp_Backend.Controllers
 
             var Station_fuel_list = dbClient.GetDatabase("fueldb").GetCollection<FuelAvailabilityModel>("fuelavailability").Find(fueldetails => fueldetails.StationID == Id).ToList();
 
-            return new JsonResult(Station_fuel_list[0]);
+            return new JsonResult(Station_fuel_list);
         }
 
         [HttpPut("update/availability/{id}")]
@@ -74,7 +74,7 @@ namespace FuelApp_Backend.Controllers
         [HttpGet("perfuel/{id}/{fuel}")]
         public JsonResult GetFuelDetailsPerStationPerFuel(string id, string fuel)
         {
-            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApp"));
+            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
 
             var per_Station_fuel_list_N = dbClient.GetDatabase("fueldb").GetCollection<FuelAvailabilityModel>("fuelavailability").Find(fueldetail => fueldetail.StationID == id && fueldetail.FuelTypes == fuel).ToList();
 

@@ -54,17 +54,22 @@ namespace FuelApp_Backend.Controllers
         [HttpPut("update/depart/{id}")]
         public JsonResult UpdateDepartureTime(String id)
         {
-            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
+            
+                MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
 
-            var queueID = new ObjectId(id);
-            var filterId = Builders<QueueModel>.Filter.Eq("_id", queueID);
-            var updateTime = Builders<QueueModel>.Update.Set("DepartureTime", DateTime.Now.ToString("HH:mm:ss"));
+                //converting the string id to a mongoose bson objectId
+                var queueId = new ObjectId(id);
+                //filtering by the queueId
+                var filter = Builders<QueueModel>.Filter.Eq("_id", queueId);
+                //updating the queueDepartureTome and the status of a queue
+                var update = Builders<QueueModel>.Update.Set("DepartureTime", DateTime.Now.ToString("HH:mm:ss")).Set("Status", "Exit");
+                dbClient.GetDatabase("fueldb").GetCollection<QueueModel>("queue").UpdateOne(filter, update);
+                //filtering the updated document
+                var updated_logout = dbClient.GetDatabase("fueldb").GetCollection<QueueModel>("queue").Find(queue => queue.Id == queueId).ToList();
 
-            dbClient.GetDatabase("fueldb").GetCollection<QueueModel>("queue").UpdateOne(filterId, updateTime);
+                return new JsonResult(updated_logout[0]);
 
-            var departTime = dbClient.GetDatabase("fueldb").GetCollection<QueueModel>("queue").Find(queueTime => queueTime.Id == queueID).ToList();
-
-            return new JsonResult(departTime[0]);
+            
         }
 
 

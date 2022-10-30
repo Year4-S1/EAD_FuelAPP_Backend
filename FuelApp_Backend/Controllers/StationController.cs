@@ -76,34 +76,6 @@ namespace FuelApp_Backend.Controllers
             }
         }
 
-        [HttpPut("update/availability/{id}")]
-        public JsonResult UpdateFuelAvailability(string id, StationModel fuelAvailability)
-        {
-            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
 
-            var fuelId = new ObjectId(id);
-            //filter by fuelId
-            var filter = Builders<StationModel>.Filter.Eq("_id", fuelId);
-            //update fuel status and amount
-            var update = Builders<StationModel>.Update.Set("Availability", fuelAvailability.Availability).Set("AmountOfFuel", fuelAvailability.AmountOfFuel);
-            dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").UpdateOne(filter, update);
-            var updated_fuel = dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").Find(fueldetail => fueldetail.Id == fuelId).ToList();
-
-            return new JsonResult(updated_fuel[0]);
-        }
-
-
-        [HttpGet("getstation/{id}")]
-        public JsonResult UpdateStationDetails(string id)
-        {
-            MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("FuelApplication"));
-
-            var ownerId = id;
-
-            var dbList = dbClient.GetDatabase("fueldb").GetCollection<StationModel>("station").Find(station => station.StationOwnerID.ToLower() == ownerId.ToLower()).ToList();
-
-            return new JsonResult(dbList[0]);
-
-        }
     }
 }
